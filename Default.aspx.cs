@@ -14,6 +14,7 @@ namespace WebApplication1
     {
         private System.Windows.Forms.BindingSource bindingSource1;
         private System.ComponentModel.IContainer components;
+        private int index_fliper=0;
 
         public DataTable SearchResTbl
         {
@@ -24,7 +25,23 @@ namespace WebApplication1
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
+            {
                 BindData();
+                ViewState["index_fliper"] = index_fliper;
+
+
+            }
+          
+            if(IsPostBack)
+            {
+                index_fliper= (int) ViewState["index_fliper"]  ;
+                index_fliper ^= 1;
+                ViewState["index_fliper"] = index_fliper;
+
+
+            }
+
+
         }
 
         private void BindData()
@@ -57,12 +74,15 @@ namespace WebApplication1
         protected void GridView1_Sorting(object sender, GridViewSortEventArgs e)
         {
             SqlParameter[] _params;
+            string strSortDirection = index_fliper == 1 ? "ASC" : "DESC";
             
+
+
             switch (e.SortExpression)
             {
                 case "ItameRank":
 
-                    _params =new SqlParameter[]{ new SqlParameter("@sortExpression", "ItameRank")};
+                    _params = new SqlParameter[] { new SqlParameter("@sortExpression", "ItameRank"), new SqlParameter("@direction", strSortDirection) };
                     SearchResTbl = null;
                     SearchResTbl = new DataAcces("sort_proc", CommandType.StoredProcedure, _params, Enums.ExecuteType.DataTable).ResultDataTable;//call the procedure with the parameter of the specific column to sort
                     GridView1.DataBind();
@@ -71,7 +91,7 @@ namespace WebApplication1
 
                 case "ItameCode":
 
-                    _params = new SqlParameter[] { new SqlParameter("@sortExpression", "ItameCode") };
+                    _params = new SqlParameter[] { new SqlParameter("@sortExpression", "ItameCode"), new SqlParameter("@direction", strSortDirection) };
                     SearchResTbl = null;
                     SearchResTbl = new DataAcces("sort_proc", CommandType.StoredProcedure, _params, Enums.ExecuteType.DataTable).ResultDataTable;//call the procedure with the parameter of the specific column to sort
                     GridView1.DataBind();
@@ -80,7 +100,7 @@ namespace WebApplication1
 
                 case "ItemDesc":
 
-                    _params = new SqlParameter[] { new SqlParameter("@sortExpression", "ItemDesc") };
+                    _params = new SqlParameter[] { new SqlParameter("@sortExpression", "ItemDesc"), new SqlParameter("@direction", strSortDirection) };
                     SearchResTbl = null;
                     SearchResTbl = new DataAcces("sort_proc", CommandType.StoredProcedure, _params, Enums.ExecuteType.DataTable).ResultDataTable;//call the procedure with the parameter of the specific column to sort
                     GridView1.DataBind();
@@ -89,7 +109,7 @@ namespace WebApplication1
 
                 case "TotalSales":
 
-                    _params = new SqlParameter[] { new SqlParameter("@sortExpression", "TotalSales") };
+                    _params = new SqlParameter[] { new SqlParameter("@sortExpression", "TotalSales"), new SqlParameter("@direction", strSortDirection) };
                     SearchResTbl = null;
                     SearchResTbl = new DataAcces("sort_proc", CommandType.StoredProcedure, _params, Enums.ExecuteType.DataTable).ResultDataTable;//call the procedure with the parameter of the specific column to sort
                     GridView1.DataBind();
@@ -99,7 +119,7 @@ namespace WebApplication1
 
                 case "StoreCode":
 
-                    _params = new SqlParameter[] { new SqlParameter("@sortExpression", "StoreCode") };
+                    _params = new SqlParameter[] { new SqlParameter("@sortExpression", "StoreCode"), new SqlParameter("@direction", strSortDirection) };
                     SearchResTbl = null;
                     SearchResTbl = new DataAcces("sort_proc", CommandType.StoredProcedure, _params, Enums.ExecuteType.DataTable).ResultDataTable;//call the procedure with the parameter of the specific column to sort
                     GridView1.DataBind();
@@ -109,7 +129,7 @@ namespace WebApplication1
 
                 case "StoreDesc":
 
-                    _params = new SqlParameter[] { new SqlParameter("@sortExpression", "StoreDesc") };
+                    _params = new SqlParameter[] { new SqlParameter("@sortExpression", "StoreDesc"), new SqlParameter("@direction", strSortDirection) };
                     SearchResTbl = null;
                     SearchResTbl = new DataAcces("sort_proc", CommandType.StoredProcedure, _params, Enums.ExecuteType.DataTable).ResultDataTable;//call the procedure with the parameter of the specific column to sort
                     GridView1.DataBind();
@@ -119,7 +139,7 @@ namespace WebApplication1
 
                 case "TotalStoreSales":
 
-                    _params = new SqlParameter[] { new SqlParameter("@sortExpression", "TotalStoreSales") };
+                    _params = new SqlParameter[] { new SqlParameter("@sortExpression", "TotalStoreSales"), new SqlParameter("@direction", strSortDirection) };
                     SearchResTbl = null;
                     SearchResTbl = new DataAcces("sort_proc", CommandType.StoredProcedure, _params, Enums.ExecuteType.DataTable).ResultDataTable;//call the procedure with the parameter of the specific column to sort
                     GridView1.DataBind();
