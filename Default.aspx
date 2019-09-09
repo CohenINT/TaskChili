@@ -5,18 +5,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
+
+
+
+    <link href="css/bootstrap.css" rel="stylesheet" />
+
+
 </head>
 <body>
     <form id="form1" runat="server">
         <div>
-       
+         
 
 
 
 
 
             <asp:GridView ID="GridView1" runat="server" ViewStateMode="Enabled" EnableViewState="true" AutoGenerateColumns="false" ShowHeaderWhenEmpty="true" 
-                DataKeyNames="ItameCode" OnDataBinding="GridView1_DataBinding">
+                DataKeyNames="ItameCode" AllowSorting="true" OnSorting="GridView1_Sorting" OnDataBinding="GridView1_DataBinding">
                 <Columns>
                     <asp:BoundField HeaderText="דירוג המוצר" DataField="ItameRank" SortExpression="ItameRank" />
                     <asp:BoundField HeaderText="מק''ט" DataField="ItameCode" SortExpression="ItameCode" />
@@ -31,11 +37,17 @@
                 </EmptyDataTemplate>                
             </asp:GridView>
 
-
-
+           <br />
+            <asp:TextBox runat="server" ID="txt_filter"></asp:TextBox>
+            <asp:Button OnClick="btn_filter_Click" runat="server" Width="220px"  ID="btn_filter" Text="סינון"/>
+            
 
 
         </div>
     </form>
+
+    <script src="js/jquery-3.4.1.js"></script>
+    <script src="js/bootstrap.js"></script>
+
 </body>
 </html>
