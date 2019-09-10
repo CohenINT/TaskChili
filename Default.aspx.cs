@@ -37,7 +37,7 @@ namespace WebApplication1
                 index_fliper= (int) ViewState["index_fliper"]  ;
                 index_fliper ^= 1;
                 ViewState["index_fliper"] = index_fliper;
-
+              
 
             }
 
@@ -50,6 +50,7 @@ namespace WebApplication1
             SearchResTbl = new DataAcces("general_proc", CommandType.StoredProcedure, null, Enums.ExecuteType.DataTable).ResultDataTable;
             GridView1.DataBind();
 
+                        markMaxMin();
 
         }
 
@@ -58,6 +59,8 @@ namespace WebApplication1
         protected void GridView1_DataBinding(object sender, EventArgs e)
         {
             ((GridView)sender).DataSource = SearchResTbl;
+           markMaxMin();
+
         }
 
         private void InitializeComponent()
@@ -156,10 +159,11 @@ namespace WebApplication1
                     break;
             }
 
+            markMaxMin();
 
         }
 
-        
+
         protected void btn_filter_Click(object sender, EventArgs e)
         {
 
@@ -167,6 +171,55 @@ namespace WebApplication1
             SearchResTbl = null;
             SearchResTbl = new DataAcces("filter_proc", CommandType.StoredProcedure, new SqlParameter[] { new SqlParameter("@filter_word", txt_filter.Text) }, Enums.ExecuteType.DataTable).ResultDataTable;
             GridView1.DataBind();
+            markMaxMin();
+
         }
+
+        private void markMaxMin()
+        {
+            double min = 9090;
+            double max = 0;
+            DataTable tbl = (DataTable)GridView1.DataSource;
+
+            foreach (DataRow item in tbl.Rows)
+            {
+               if( double.Parse(item["TotalSales"].ToString()) > max)
+                {
+                    max = double.Parse(item["TotalSales"].ToString());
+
+                }
+
+                if (double.Parse(item["TotalSales"].ToString()) < min)
+                {
+                    min = double.Parse(item["TotalSales"].ToString());
+                }
+
+            }
+
+
+
+            //find the cell and mark it
+            const int NET_SALES_TOTAL_COL= 3;
+            foreach (GridViewRow item in GridView1.Rows)
+            {
+                if(double.Parse( item.Cells[NET_SALES_TOTAL_COL].Text.ToString()) == max)
+                {
+                    item.CssClass = "max";
+                }
+
+                if (double.Parse(item.Cells[NET_SALES_TOTAL_COL].Text.ToString()) == min)
+                {
+                    item.CssClass = "min";
+                }
+
+
+
+            }
+
+        }
+
+
+
+        
     }
 }
